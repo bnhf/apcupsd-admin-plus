@@ -1,0 +1,12 @@
+[Unit]
+Description=apcupsd-cgi container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a apcupsd-cgi
+ExecStop=/usr/bin/docker stop -t 2 apcupsd-cgi
+
+[Install]
+WantedBy=default.target
