@@ -1,6 +1,6 @@
 # APC UPS Power Management Web Interface (from debian:latest, fcgiwrap, apcupsd-cgi)
 FROM debian:latest 
-# FROM debian:jessie
+# FROM debian:buster
 
 # update
 RUN apt-get -y update
