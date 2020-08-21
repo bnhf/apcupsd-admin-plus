@@ -29,3 +29,7 @@ Now edit /etc/default/apcupsd
 sudo nano /etc/default/apcupsd
 ```
 ISCONFIGURED=yes
+All is done, check the status of your UPS 
+```
+apcaccess status
+```
