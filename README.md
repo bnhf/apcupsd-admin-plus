@@ -29,7 +29,15 @@ Now edit /etc/default/apcupsd
 sudo nano /etc/default/apcupsd
 ```
 ISCONFIGURED=yes
-All is done, check the status of your UPS 
+All is done, check the status of daemon 
+```
+sudo systemctl status apcupsd
+```
+If the daemon is not running, proceed to enable and start it
+```
+sudo systemctl enable apcupsd && sudo systemctl start apcupsd
+```
+check the status of your APC UPS
 ```
 apcaccess status
 ```
