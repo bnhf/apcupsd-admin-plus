@@ -23,3 +23,9 @@ The minimum parameters to be configured in case of USB connection are the follow
 | DEVICE |  |leave blank for autoconfig usb port| 
 | NETSERVER | on | enable network information server|
 | NISIP | 0.0.0.0 | IP address on wich NIS server will listen for incoming connections|
+
+Now edit /etc/default/apcupsd
+```
+sudo nano /etc/default/apcupsd
+```
+ISCONFIGURED=yes
