@@ -16,3 +16,10 @@ You should find a device "American Power Conversion Uninterruptible Power Supply
 sudo nano /etc/apcupsd/apcupsd.conf
 ```
 The minimum parameters to be configured in case of USB connection are the following:
+| Parameter | Setting |
+| :----: | --- |
+| UPSCABLE | usb |
+| UPSTYPE | usb |
+| DEVICE | <BLANK> for autoconfig |
+| NETSERVER | on |
+| NISIP | 0.0.0.0 |
