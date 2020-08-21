@@ -41,3 +41,16 @@ check the status of your APC UPS
 ```
 apcaccess status
 ```
+
+## Docker apcupsd-cgi
+Docker compose
+```
+versione: "2.1"
+services:
+  apcupsd-cgi:
+      image: zedred/apcupsd-cgi
+      container_name: apcupsd-cgi
+      restart: unless-stopped
+      ports:
+        - 4321:80
+```
