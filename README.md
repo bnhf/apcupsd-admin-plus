@@ -29,6 +29,7 @@ Now edit /etc/default/apcupsd
 sudo nano /etc/default/apcupsd
 ```
 ISCONFIGURED=yes
+
 All is done, check the status of daemon 
 ```
 sudo systemctl status apcupsd
@@ -43,7 +44,9 @@ apcaccess status
 ```
 
 ## Docker apcupsd-cgi
-The docker image is Debian buster based, with nginx-light and 
+The docker image is Debian buster based, with nginx-light as web server, fcgiwrap as cgi server and obviously apcupsd-cgi. 
+
+Apcupsd-cgi is configured for search APC UPS with the host machine IP. Nginx is configured for 
 
 To run docker container
 
