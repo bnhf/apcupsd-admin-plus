@@ -11,4 +11,8 @@ If you have connected your APC UPS with a USB cable you can check that it is cor
 ```
 sudo lsusb
 ```
-You should find a device "American Power Conversion Uninterruptible Power Supply"
+You should find a device "American Power Conversion Uninterruptible Power Supply". Edit the file /etc/apcupsd/apcupsd.conf following the guide you find on the official website.
+```
+sudo nano /etc/apcupsd/apcupsd.conf
+```
+The minimum parameters to be configured in case of USB connection are the following:
