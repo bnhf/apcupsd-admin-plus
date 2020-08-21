@@ -43,6 +43,12 @@ apcaccess status
 ```
 
 ## Docker apcupsd-cgi
+The docker image is Debian buster based, with nginx-light and 
+
+To run docker container
+
+docker run -d -p 4321:80 -restart=unless-stopped --name apcupsd-cgi zedred/apcupsd-cgi
+
 Docker compose
 ```
 versione: "2.1"
