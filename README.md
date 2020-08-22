@@ -74,6 +74,6 @@ edit the files and recreate a new image
 sudo docker build -t yourname/apcupsd-cgi .
 ```
 ## Docker apcupsd-cgi
-Enter the application at address http://you_host_IP:4321
+Enter the application at address http://your_host_IP:4321
 
 
