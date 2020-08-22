@@ -65,8 +65,14 @@ services:
         - 4321:80
 ```
 
-If you want to customize the image edit the files and recreate a new image
-
+If you want to customize the image, you have to clone the repository on your system:
+```
+git clone https://github.com/zedred79/docker-apcupsd-cgi.git
+```
+edit the files and recreate a new image
+```
+sudo docker build -t yourname/apcupsd-cgi .
+```
 ## Docker apcupsd-cgi
 Enter the application at address http://you_host_IP:4321
 
