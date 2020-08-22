@@ -64,3 +64,7 @@ services:
       ports:
         - 4321:80
 ```
+
+## Docker apcupsd-cgi
+Enter the application at address http://you_host_IP:4321
+
