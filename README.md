@@ -65,6 +65,9 @@ services:
         - 4321:80
 ```
 
+If you want to customize the image edit the files and recreate a new image
+
 ## Docker apcupsd-cgi
 Enter the application at address http://you_host_IP:4321
+
 
