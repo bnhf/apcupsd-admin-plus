@@ -47,12 +47,13 @@ apcaccess status
 The docker image is Debian buster based, with nginx-light as web server, fcgiwrap as cgi server and obviously apcupsd-cgi. 
 
 Apcupsd-cgi is configured to search and connect apcupsd daemon in the host machine IP on standard port 3551. Nginx is configured to conncet with fcgiwrap (CGI server) and to serve multimon.cgi directly on port 80. 
+As explained the container exposes port 80, if as I think port 80 on your host is already busy, redirect it to a free port. I use port 4321. 
 
-To run docker container
-
+To run docker container:
+```
 docker run -d -p 4321:80 -restart=unless-stopped --name apcupsd-cgi zedred/apcupsd-cgi
-
-Docker compose
+```
+If you use Docker compose
 ```
 versione: "2.1"
 services:
