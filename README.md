@@ -55,7 +55,7 @@ docker run -d -p 4321:80 -restart=unless-stopped --name apcupsd-cgi zedred/apcup
 ```
 If you use Docker compose
 ```
-versione: "2.1"
+version: "2.1"
 services:
   apcupsd-cgi:
       image: zedred/apcupsd-cgi
