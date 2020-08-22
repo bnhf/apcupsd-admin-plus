@@ -2,7 +2,7 @@
 Docker - APC UPS Power Management Web Interface (from nginx:latest, fcgiwrap, apcupsd-cgi)
 
 # Requirements
-This is the APC UPS Power Management Web Interface, so it is necessary to have an APC UPS that supports monitoring (USB cable or network). 
+This is the APC UPS Power Management Web Interface, so it is necessary to have an [APC UPS](https://www.apc.com/)that supports monitoring (USB cable or network). 
 You have to install apcupsd daemon in the host machine (if the APC UPS is connected here). For debian/ubuntu:
 ```
 sudo apt install apcupsd
