@@ -3,7 +3,7 @@ FROM debian:latest
 # FROM debian:buster
 
 # update
-RUN apt-get -y update
+RUN apt-get -y update && apt-get -y upgrade
  
 # install
 RUN apt-get -y install nginx-light apcupsd-cgi fcgiwrap
