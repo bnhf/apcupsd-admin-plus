@@ -71,10 +71,9 @@ apcaccess status
 ```
 
 # apcupsd-cgi
-The docker image is Debian buster based, with nginx-light as web server, fcgiwrap as cgi server and obviously apcupsd-cgi. 
+The docker image is Debian 11 (Bullseye) based, with nginx-light as web server, fcgiwrap as cgi server and obviously apcupsd-cgi. 
 
-Apcupsd-cgi is configured to search and connect apcupsd daemon in the host machine IP on standard port 3551. Nginx is configured to conncet with fcgiwrap (CGI server) and to serve multimon.cgi directly on port 80. 
-As explained, the container exposes port 80, if as I think port 80 on your host is already busy, redirect it to a free port. I use port 3552. 
+Apcupsd-cgi is configured to search and connect to the apcupsd daemon on the host machine IP via the standard port 3551. Nginx is configured to connect with fcgiwrap (CGI server) and to serve multimon.cgi directly on port 80. The container exposes port 80, but can be remapped as required -- I use port 3552.
 
 *Portainer Stacks (container-based) installation:*
 
@@ -97,6 +96,9 @@ services:
     UPSHOSTS (List of hostnames or IP addresses for computers with connected APC UPSs. Space separated without quotes.)
     UPSNAMES (List of names you'd like used in the WebUI. Order must match UPSHOSTS. Space separated without quotes.)
     TZ (Timezone for apcupsd-cgi to use when displaying information about individual UPS units)
+    
+Here's an example of what your Portainer Stack would look like:
+![screenshot-raspberrypi10_9000-2023 01 19-14_52_39](https://user-images.githubusercontent.com/41088895/213571158-ff25a8ec-e5f7-44d9-8588-754b5bd31226.png)
 
 If you want to customize the image, you have to clone the repository on your system:
 ```
@@ -108,4 +110,13 @@ sudo docker build -t yourname/apcupsd-cgi .
 ```
 ## apcupsd-cgi
 Enter the application at address http://your_host_IP:3552
+
+Here's what it looks like running in an Organizr window with Portainer, Cockpit and OpenVPN Admin Plus available:
+
+![screenshot-raspberrypi10-2023 01 19-14_49_21](https://user-images.githubusercontent.com/41088895/213570777-74d9dfb9-9c48-4de3-9129-16a6589a8d12.png)
+
+And drilling down on one of the UPS units for additional detail:
+
+![screenshot-raspberrypi10-2023 01 19-14_50_25](https://user-images.githubusercontent.com/41088895/213570880-d6eb5980-2f98-4523-a530-0fa0c3da7832.png)
+
 
