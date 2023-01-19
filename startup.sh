@@ -1,5 +1,12 @@
 #!/bin/bash
 
+rm /etc/apcupsd/apcupsd.conf && touch /etc/apcupsd/apcupsd.conf
+array=( "$UPSHOSTS" )
+
+for i in "${array[@]}"
+    do 
+        echo "MONITOR $i " >> /etc/apcupsd/apcupsd.conf
+        
 # print host IP
 # hostIp=$(/sbin/ip route|awk '/default/ { print $3 }')
 
