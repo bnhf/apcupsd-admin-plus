@@ -12,7 +12,7 @@ You have to install the [apcupsd daemon](http://www.apcupsd.org/) on the host ma
 version: '3.7'
 services:
   apcupsd:
-    image: gregewing/apcupsd:latest
+    image: bnhf/apcupsd:latest
     container_name: apcupsd
     devices:
       - /dev/usb/hiddev0
