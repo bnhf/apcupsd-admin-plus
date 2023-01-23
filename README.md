@@ -6,7 +6,7 @@ Docker - APC UPS Power Management Web Interface (from nginx:latest, fcgiwrap, ap
 This is the APC UPS Power Management Web Interface, so it is necessary to have an [APC UPS](https://www.apc.com/) that supports monitoring (USB cable or network). 
 You have to install the [apcupsd daemon](http://www.apcupsd.org/) on the host machine(s). There are two options here, either install apcupsd directly on each host that has a UPS connected to it, or in a container on each of those hosts. If you have multiple UPS units, don't already have apcupsd installed on the host, and prefer to use Docker and Portainer when possible:
 
-*Portainer Stacks (container-based) installation:*
+### *Portainer Stacks (container-based) installation:*
 
 ```yml
 version: '3.7'
@@ -15,21 +15,28 @@ services:
     image: gregewing/apcupsd:latest
     container_name: apcupsd
     devices:
-      - /dev/usb/hiddev0 # Do an <ls /dev/usb> from the command line to determine possible options here
+      - /dev/usb/hiddev0
     ports:
       - 3551:3551
-    environment:
-      - TZ=${TZ}
+    environment: # Delete or comment out any environment variables you don't wish to change
+      - UPSNAME=${UPSNAME} # This value will display in apcupsd-cgi details.
+      - UPSCABLE=${UPSCABLE} # Default value is usb
+      - UPSTYPE=${UPSTYPE} # Default value is usb
+      - DEVICE=${DEVICE} # Default value is <blank>
+      - NETSERVER=${NETSERVER} # Default value is on
+      - NISIP=${NISIP} # Default value is 0.0.0.0
+      - TZ=${TZ} # Default value is Europe/London
     volumes:
       - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
-      - /data/apcupsd:/etc/apcupsd # You'll need an apcupsd.conf file to exist in whatever folder on the host you're binding /etc/apcupsd to.
+      - /data/apcupsd:/etc/apcupsd
     restart: unless-stopped
 ```
-*Environment variables required for the above (or hardcode values into compose):*
-
+*All environment variables are optional for the above (or hardcode values into compose). These two are recommended though:*
+    
+    UPSNAME (Used in apcupsd-cgi and system tray icons. Should be 8 characters or less)
     TZ (The timezone you'd like apcupsd-cgi to use)
 
-*For debian/ubuntu (host-based) installation:*
+### *For debian/ubuntu (host-based) installation:*
 
 ```
 sudo apt install apcupsd
@@ -75,7 +82,7 @@ The docker image is Debian 11 (Bullseye) based, with nginx-light as web server, 
 
 Apcupsd-cgi is configured to search and connect to the apcupsd daemon on the host machine IP via the standard port 3551. Nginx is configured to connect with fcgiwrap (CGI server) and to serve multimon.cgi directly on port 80. The container exposes port 80, but can be remapped as required -- I use port 3552.
 
-*Portainer Stacks (container-based) installation:*
+### *Portainer Stacks (container-based) installation:*
 
 ```yml
 version: '3.7'
@@ -113,7 +120,7 @@ Enter the application at address http://your_host_IP:3552
 
 Here's what it looks like running in an Organizr window with Portainer, Cockpit and OpenVPN Admin Plus available:
 
-![screenshot-raspberrypi10-2023 01 19-14_49_21](https://user-images.githubusercontent.com/41088895/213570777-74d9dfb9-9c48-4de3-9129-16a6589a8d12.png)
+![screenshot-raspberrypi10-2023 01 22-10_18_34](https://user-images.githubusercontent.com/41088895/214115480-384fca99-162d-42db-8e48-0695c5a99cb4.png)
 
 And drilling down on one of the UPS units for additional detail:
 
