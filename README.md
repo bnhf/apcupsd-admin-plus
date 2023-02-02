@@ -1,12 +1,13 @@
-# apcupsd-cgi
-Docker - APC UPS Power Management Web Interface (from nginx:latest, fcgiwrap, apcupsd-cgi)
+# apcupsd plus apcupsd-cgi
+Docker - APC UPS Power Management daemon plus Web Interface (from nginx:latest, fcgiwrap, apcupsd-cgi)
 
 *Requirements:*
 
-This is the APC UPS Power Management Web Interface, so it is necessary to have an [APC UPS](https://www.apc.com/) that supports monitoring (USB cable or network). 
+This is the APC UPS Power Management daemon plus Web Interface, so it is necessary to have an [APC UPS](https://www.apc.com/) that supports monitoring (USB cable or network). 
 You have to install the [apcupsd daemon](http://www.apcupsd.org/) on the host machine(s). There are two options here, either install apcupsd directly on each host that has a UPS connected to it, or in a container on each of those hosts. If you have multiple UPS units, don't already have apcupsd installed on the host, and prefer to use Docker and Portainer when possible:
 
-### *Portainer Stacks (container-based) installation:*
+## apcupsd
+### *Portainer Stacks (container-based) installation of the apcupsd daemon:*
 
 ```yml
 version: '3.7'
@@ -36,53 +37,12 @@ services:
     UPSNAME (Used in apcupsd-cgi and system tray icons. Should be 8 characters or less)
     TZ (The timezone you'd like apcupsd-cgi to use)
 
-### *For debian/ubuntu (host-based) installation:*
-
-```
-sudo apt install apcupsd
-```
-If you have connected your APC UPS with a USB cable you can check that it is correctly detected:
-```
-sudo lsusb
-```
-You should find a device "American Power Conversion Uninterruptible Power Supply". Edit the file /etc/apcupsd/apcupsd.conf following the guide you find on the official website.
-```
-sudo nano /etc/apcupsd/apcupsd.conf
-```
-The minimum parameters to be configured in case of USB connection are the following:
-| Parameter | Setting | Notes |
-| :----: | --- | ---|
-| UPSCABLE | usb | define the tyoe of cable connection |
-| UPSTYPE | usb | define the type of UPS |
-| DEVICE |  |leave blank for autoconfig usb port| 
-| NETSERVER | on | enable network information server|
-| NISIP | 0.0.0.0 | IP address on wich NIS server will listen for incoming connections|
-
-Now edit /etc/default/apcupsd
-```
-sudo nano /etc/default/apcupsd
-```
-ISCONFIGURED=yes
-
-All is done, check the status of daemon 
-```
-sudo systemctl status apcupsd
-```
-If the daemon is not running, proceed to enable and start it
-```
-sudo systemctl enable apcupsd && sudo systemctl start apcupsd
-```
-check the status of your APC UPS
-```
-apcaccess status
-```
-
-# apcupsd-cgi
+## apcupsd-cgi
 The docker image is Debian 11 (Bullseye) based, with nginx-light as web server, fcgiwrap as cgi server and obviously apcupsd-cgi. 
 
 Apcupsd-cgi is configured to search and connect to the apcupsd daemon on the host machine IP via the standard port 3551. Nginx is configured to connect with fcgiwrap (CGI server) and to serve multimon.cgi directly on port 80. The container exposes port 80, but can be remapped as required -- I use port 3552.
 
-### *Portainer Stacks (container-based) installation:*
+### *Portainer Stacks (container-based) installation of apcupd-cgi:*
 
 ```yml
 version: '3.7'
