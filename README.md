@@ -93,6 +93,7 @@ services:
   apcupsd-cgi:
     image: bnhf/apcupsd-cgi:latest
     container_name: apcupsd-cgi
+    dns_search: localdomain # Set to your LAN's domain name (often local or localdomain), this should help with local DNS resolution of hostnames
     ports:
       - 3552:80
     environment:
