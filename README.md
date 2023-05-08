@@ -16,26 +16,68 @@ services:
     image: bnhf/apcupsd:latest
     container_name: apcupsd
     devices:
-      - /dev/usb/hiddev0
+      - /dev/usb/hiddev0 # This device needs to match what the APC UPS on your APCUPSD_MASTER system uses -- Comment out this section on APCUPSD_SLAVES
     ports:
       - 3551:3551
-    environment: # Delete or comment out any environment variables you don't wish to change
-      - UPSNAME=${UPSNAME} # This value will display in apcupsd-cgi details.
-      - UPSCABLE=${UPSCABLE} # Default value is usb
-      - UPSTYPE=${UPSTYPE} # Default value is usb
-      - DEVICE=${DEVICE} # Default value is <blank>
-      - NETSERVER=${NETSERVER} # Default value is on
-      - NISIP=${NISIP} # Default value is 0.0.0.0
-      - TZ=${TZ} # Default value is Europe/London
+    environment:
+      - UPSNAME=${UPSNAME} # Sets a name for the UPS (1 to 8 chars), that will be used by System Tray notifications, apcupsd-cgi and Grafana dashboards
+#      - UPSCABLE=${UPSCABLE} # Usually doesn't need to be changed on system connected to UPS. (default=usb) On APCUPSD_SLAVES set the value to ether
+#      - UPSTYPE=${UPSTYPE} # Usually doesn't need to be changed on system connected to UPS. (default=usb) On APCUPSD_SLAVES set the value to net
+#      - DEVICE=${DEVICE} # Use this only on APCUPSD_SLAVES to set the hostname or IP address of the APCUPSD_MASTER with the listening port (:3551)
+#      - POLLTIME=${POLLTIME} # Interval (in seconds) at which apcupsd polls the UPS for status (default=60)
+#      - ONBATTERYDELAY=${ONBATTERYDELAY} # Sets the time in seconds from when a power failure is detected until an onbattery event is initiated (default=6)
+#      - BATTERYLEVEL=${BATTERYLEVEL} # Sets the daemon to send the poweroff signal when the UPS reports a battery level of x% or less (default=5)
+#      - MINUTES=${MINUTES} # Sets the daemon to send the poweroff signal when the UPS has x minutes or less remaining power (default=5)
+#      - TIMEOUT=${TIMEOUT} # Sets the daemon to send the poweroff signal when the UPS has been ON battery power for x seconds (default=0)
+#      - KILLDELAY=${KILLDELAY} # If non-zero, sets the daemon to attempt to turn the UPS off x seconds after sending a shutdown request (default=0)
+#      - SELFTEST=${SELFTEST} # Sets the daemon to ask the UPS to perform a self test every x hours (default=336)
+#      - APCUPSD_HOSTS=${APCUPSD_HOSTS} # If this is the MASTER, then enter the APUPSD_HOSTS list here, including this system (space separated)
+#      - APCUPSD_NAMES=${APCUPSD_NAMES} # Match the order of this list one-to-one to APCUPSD_HOSTS list, including this system (space separated)
+      - TZ=${TZ}
+      - SMTP_GMAIL=${SMTP_GMAIL} # Gmail account (with 2FA enabled) to use for SMTP
+      - GMAIL_APP_PASSWD=${GMAIL_APP_PASSWD} # App password for apcupsd from Gmail account being used for SMTP
+      - NOTIFICATION_EMAIL=${NOTIFICATION_EMAIL} # The Email account to receive on/off battery messages and other notifications (Any valid Email will work)
+      - WOLWEB_HOSTNAMES=${WOLWEB_HOSTNAMES} # Space seperated list of hostnames names to send WoL Magic Packet to on startup
+      - WOLWEB_PATH_BASE=${WOLWEB_PATH_BASE} # Everything after http:// and before the /hostname required to wake a system with WoLweb e.g. raspberrypi6:8089/wolweb/wake
+      - WOLWEB_DELAY=${WOLWEB_DELAY} # Value to use for "sleep" delay before sending a WoL Magic Packet to WOLWEB_HOSTNAMES in seconds
+    healthcheck:
+      test: ["CMD-SHELL", "apcaccess | grep -E 'ONLINE' >> /dev/null"] # Command to check health
+      interval: 30s # Interval between health checks
+      timeout: 5s # Timeout for each health check
+      retries: 3 # How many times to retry
+      start_period: 15s # Estimated time to boot
     volumes:
-      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket
-      - /data/apcupsd:/etc/apcupsd
+      - /var/run/dbus/system_bus_socket:/var/run/dbus/system_bus_socket # Required to support host shutdown from the container
+      - /data/apcupsd:/etc/apcupsd # /etc/apcupsd can be bound to a directory or a docker volume
     restart: unless-stopped
+# volumes: # Use this section for volume bindings only
+#   config: # The name of the stack will be appended to the beginning of this volume name, if the volume doesn't already exist
+#     external: true # Use this directive if you created the docker volume in advance
 ```
 *All environment variables are optional for the above (or hardcode values into compose). These two are recommended though:*
-    
-    UPSNAME (Used in apcupsd-cgi and system tray icons. Should be 8 characters or less)
-    TZ (The timezone you'd like apcupsd-cgi to use)
+ 
+```console
+UPSNAME=${UPSNAME}
+UPSCABLE=${UPSCABLE}
+UPSTYPE=${UPSTYPE}
+DEVICE=${DEVICE}
+POLLTIME=${POLLTIME} 
+ONBATTERYDELAY=${ONBATTERYDELAY}
+BATTERYLEVEL=${BATTERYLEVEL}
+MINUTES=${MINUTES}
+TIMEOUT=${TIMEOUT}
+KILLDELAY=${KILLDELAY}
+SELFTEST=${SELFTEST} 
+APCUPSD_HOSTS=${APCUPSD_HOSTS}
+APCUPSD_NAMES=${APCUPSD_NAMES}
+TZ=${TZ}
+SMTP_GMAIL=${SMTP_GMAIL}
+GMAIL_APP_PASSWD=${GMAIL_APP_PASSWD}
+NOTIFICATION_EMAIL=${NOTIFICATION_EMAIL}
+WOLWEB_HOSTNAMES=${WOLWEB_HOSTNAMES}
+WOLWEB_PATH_BASE=${WOLWEB_PATH_BASE}
+WOLWEB_DELAY=${WOLWEB_DELAY}
+```
 
 ## apcupsd-cgi
 The docker image is Debian 11 (Bullseye) based, with nginx-light as web server, fcgiwrap as cgi server and obviously apcupsd-cgi. 
@@ -67,7 +109,8 @@ services:
     TZ (Timezone for apcupsd-cgi to use when displaying information about individual UPS units)
     
 Here's an example of what your Portainer Stack would look like:
-![screenshot-raspberrypi10_9000-2023 01 19-14_52_39](https://user-images.githubusercontent.com/41088895/213571158-ff25a8ec-e5f7-44d9-8588-754b5bd31226.png)
+
+![screencapture-raspberrypi10-2023-05-08-10_17_51](https://user-images.githubusercontent.com/41088895/236878013-aa67aedd-c800-4ed1-9959-61f0785ceb92.png)
 
 If you want to customize the image, you have to clone the repository on your system:
 ```
@@ -82,7 +125,7 @@ Enter the application at address http://your_host_IP:3552
 
 Here's what it looks like running in an Organizr window with Portainer, Cockpit and OpenVPN Admin Plus available:
 
-![screenshot-raspberrypi10-2023 01 22-10_18_34](https://user-images.githubusercontent.com/41088895/214115480-384fca99-162d-42db-8e48-0695c5a99cb4.png)
+![screenshot-raspberrypi10-2023 05 07-11_42_01](https://user-images.githubusercontent.com/41088895/236878302-69cad775-555c-4ca9-9189-249fc4a685c1.png)
 
 And drilling down on one of the UPS units for additional detail:
 
