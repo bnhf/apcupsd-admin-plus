@@ -1,7 +1,20 @@
 #!/bin/bash
 
 # remove sample and create empty hosts file
-rm /etc/apcupsd/hosts.conf && touch /etc/apcupsd/hosts.conf
+rm /opt/apcupsd/hosts.conf && touch /opt/apcupsd/hosts.conf
+
+# Check if /etc/apcupsd files exist, and copy them from /opt/apcupsd if they don't
+files=( apcupsd.conf hosts.conf apccontrol changeme commfailure commok killpower multimon.conf offbattery onbattery ups-monitor apcupsd.css )
+
+for i in "${files[@]}"
+  do
+    if [ ! -f /etc/apcupsd/$i ]; then
+      cp /opt/apcupsd/$i /etc/apcupsd/$i \
+      && echo "No existing $i found"
+    else
+      echo "Existing $i found, and will be used"
+    fi
+  done
 
 # populate two arrays with host and UPS names
 HOSTS=( $UPSHOSTS )

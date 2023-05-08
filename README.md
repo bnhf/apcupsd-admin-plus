@@ -48,15 +48,17 @@ Apcupsd-cgi is configured to search and connect to the apcupsd daemon on the hos
 version: '3.7'
 services:
   apcupsd-cgi:
-      image: bnhf/apcupsd-cgi:latest
-      container_name: apcupsd-cgi
-      ports:
-        - 3552:80
-      environment:
-        - UPSHOSTS=${UPSHOSTS} # Ordered list of hostnames or IP addresses of UPS connected computers (space separated, no quotes)
-        - UPSNAMES=${UPSNAMES} # Matching ordered list of location names to display on status page (space separated, no quotes)
-        - TZ=${TZ} # Timezone to use for status page -- UTC is the default
-      restart: unless-stopped
+    image: bnhf/apcupsd-cgi:latest
+    container_name: apcupsd-cgi
+    ports:
+      - 3552:80
+    environment:
+      - UPSHOSTS=${UPSHOSTS} # Ordered list of hostnames or IP addresses of UPS connected computers (space separated, no quotes)
+      - UPSNAMES=${UPSNAMES} # Matching ordered list of location names to display on status page (space separated, no quotes)
+      - TZ=${TZ} # Timezone to use for status page -- UTC is the default
+    volumes:
+      - /data/apcupsd-cgi:/etc/apcupsd
+    restart: unless-stopped
 ```
 *Environment variables required for the above (or hardcode values into compose):*
 
