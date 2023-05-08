@@ -15,6 +15,7 @@ services:
   apcupsd:
     image: bnhf/apcupsd:latest
     container_name: apcupsd
+    hostname: apcupsd_ups # Use a unique hostname here for each apcupsd instance, and it'll be used instead of the container number in apcupsd-cgi and e-mail notifications.
     devices:
       - /dev/usb/hiddev0 # This device needs to match what the APC UPS on your APCUPSD_MASTER system uses -- Comment out this section on APCUPSD_SLAVES
     ports:
