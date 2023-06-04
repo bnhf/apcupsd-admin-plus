@@ -26,6 +26,15 @@ for ((i=0;i<${#HOSTS[@]};i++))
         echo "MONITOR ${HOSTS[$i]} \"${NAMES[$i]}\"" >> /etc/apcupsd/hosts.conf
         echo "MONITOR ${HOSTS[$i]} \"${NAMES[$i]}\""
 done
+
+# provision Grafana dashboard data directories and files if requested
+if [[ $DASHBOARD_PROVISION == "true" ]]; then
+  mkdir -p /etc/grafana/provisioning/datasources /etc/grafana/provisioning/dashboards /etc/telegraf \
+  && mv -v /opt/telegraf.conf /etc/telegraf \
+  && mv -v /opt/datasource.yml /etc/grafana/provisioning/datasources \
+  && mv -v /opt/dashboard.yml /etc/grafana/provisioning/dashboards \
+  && mv -v /opt/APC-UPS-Detailed-Summary-1675087806267.json /etc/grafana/provisioning/dashboards
+fi
         
 # print host IP
 # hostIp=$(/sbin/ip route|awk '/default/ { print $3 }')
