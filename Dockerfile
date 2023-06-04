@@ -17,10 +17,7 @@ COPY startup.sh /opt/startup.sh
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # place files for optional dashboard provisioning
-ADD dashboard/APC-UPS-Detailed-Summary-1675087806267.json \
-    dashboard/dashboard.yml \
-    dashboard/datasource.yml \
-    dashboard/telegraf.conf /opt/
+COPY dashboard /opt
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log \
  && ln -sf /dev/stderr /var/log/nginx/error.log

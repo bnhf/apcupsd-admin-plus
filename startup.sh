@@ -29,7 +29,7 @@ done
 
 # provision Grafana dashboard data directories and files if requested
 if [[ $DASHBOARD_PROVISION == "true" ]]; then
-  mkdir -p /etc/grafana/provisioning/datasources /etc/grafana/provisioning/dashboards /etc/telegraf \
+  mkdir -p /etc/grafana/provisioning/datasources/ /etc/grafana/provisioning/dashboards/ /etc/telegraf/ \
   && mv -v /opt/telegraf.conf /etc/telegraf \
   && mv -v /opt/datasource.yml /etc/grafana/provisioning/datasources \
   && mv -v /opt/dashboard.yml /etc/grafana/provisioning/dashboards \
