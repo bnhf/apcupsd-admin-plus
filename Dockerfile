@@ -1,13 +1,12 @@
 # APC UPS Power Management Web Interface (from debian:latest, fcgiwrap, apcupsd-cgi)
-# FROM debian:buster
-FROM debian:latest
+FROM debian:bullseye
 LABEL Scott Ueland (https://github.com/bnhf)
 
 # update
 RUN apt-get -y update && apt-get -y upgrade
  
 # install
-RUN apt-get -y install nginx-light apcupsd-cgi fcgiwrap \
+RUN apt-get -y install nginx-light apcupsd-cgi fcgiwrap iputils-ping \
  && mkdir /opt/apcupsd \
  && mv /etc/apcupsd/* /opt/apcupsd
 
