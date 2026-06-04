@@ -42,6 +42,11 @@ fi
 # change the IP to monitor with the host IP in /etc/apcupsd/hosts.conf
 # sed -i 's/MONITOR 127.0.0.1/MONITOR \"$hostIp\"/g' /etc/apcupsd/hosts.conf
 
-# start fcgiwarap
-/etc/init.d/fcgiwrap start
+# create nginx fastcgi cache directory
+mkdir -p /tmp/nginx_cache
+
+# start fcgiwrap directly (init.d not reliable in containers)
+fcgiwrap -s unix:/var/run/fcgiwrap.socket &
+sleep 1
+chmod 777 /var/run/fcgiwrap.socket
 nginx -g 'daemon off;'
